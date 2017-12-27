@@ -1,0 +1,10 @@
+**/bin/
+**/build/
+**/out/
+**/private/
+.idea/**
+.classpath
+.project
+*.db
+**/target/
+**/lib/
