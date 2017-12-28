@@ -1,51 +1,42 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>SQL injection</title>
+        <title>SQL injection | Cyber Security Base Course Project I</title>
     </head>
     <body>
-
+        <p><a href="/">Go to index page</a></p>
         <h1>SQL injection</h1>
-
         <p>SQL injection is a code injection technique where an attacker can execute
             malicious SQL statements in web applications database. It can affect any web
-            application that uses a SQL database. </p>
-        <p>By leveraging SQL injection technique an attacker may use it to retrieve the
-            contents of an entire database. This may lead to leaking sensitive data such
-            as customer data, sensitive personal information, intellectual property and
-            other sensitive information.</p>
+            application that uses a SQL database. By leveraging SQL injection technique an
+            attacker may retrieve the contents of or destroy an entire database.
+            This may lead to leaking sensitive data such as customer data, sensitive personal
+            information, intellectual property and other sensitive information.</p>
         <p>In order to exploit the vulnerability an attacker must find an input in the
             web application that is used directly as a part of a SQL query. The attacker
             may then use malicious payload as the input and execute his/her own code in
             the applications database.</p>
-
         <p>The form below allows a user to view their own account information. User is supposed
             to enter their own iban number. Upon execution the web
             application executes following SQL: "SELECT * FROM accounts WHERE iban='" + iban + "'".
             Since iban number is included directly in the executed sql statement, a malicious
             user may view other users' sensitive information by using SQL injection technique.</p>
-
         <h2>Steps to execute</h2>
-
         <p>To view a user's account information:</p>
         <ul>
             <li>enter AA11112222333344 in the text box and click the button.</li>
             <li>=> the user's account information is displayed.</li>
         </ul>
-
         <p>To execute a malicous SQL statement and view all users' account information:</p>
         <ul>
             <li>enter any' OR 1=1 OR '' = ' in the text box and click the button.</li>
             <li>=> all users' account information is displayed.</li>
         </ul>
-
         <h2>View your account information:</h2>
-
-        <form th:action="@{/account}" method="POST">
+        <form th:action="@{/sqlinjection}" method="POST">
             <span>Insert your account's iban number to view balance:</span><br/>
             <input type="text" name="iban"/> <input type="submit" value="View information"/>
         </form>
-
         <br /><br />
         <table>
             <thead>
@@ -63,6 +54,6 @@
             </tr>
             </tbody>
         </table>
-
+        <p><a href="/">Go to index page</a></p>
     </body>
 </html>

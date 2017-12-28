@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Broken Authentication and Session Management | Cyber Security Base Course Project I</title>
+</head>
+<body>
+<p><a href="/">Go to index page</a></p>
+<h1>Broken Authentication and Session Management</h1>
+<p>Broken authentication and session management flaw occurs when an applications'
+    functionalities related to authentication and session management are implemented
+    improperly. This allows attackers to gain access to sensitive content such as
+    passwords or session keys.</p>
+<p>This flawed implementation allows an attacker to log in to the system without
+    providing a password. This is due to a flaw in error handling management in the
+    web application.</p>
+<p>In order to reproduce the flaw you need to use a for example Burp suite to intercept
+    and modify the web request.</p>
+
+<h2>Steps to execute</h2>
+<p>To log in using valid credentials:</p>
+<ul>
+    <li>enter larry in the username field and istheking in the password field and click Login.</li>
+    <li>=> a welcome page is displayed.</li>
+</ul>
+<p>To log in using without credentials:</p>
+<ul>
+    <li>enter larry in the username field and password in the password field and click Login.</li>
+    <li>=> an error message is displayed.</li>
+</ul>
+<p>To log in without valid credentials:</p>
+<ul>
+    <li>start and configure burp suite to intercept project site's traffic (see
+        <a href="https://cybersecuritybase.github.io/securing/part4.html">Securing
+        Software, part 4 page</a> for reference)</li>
+    <li>setup Burp Suite to intercept (Proxy -> Intercept -> Intercept is on/off)</li>
+    <li>modify the request so that you remove the password parameter</li>
+    <li>forward to original address.</li>
+    <li>=> a welcome page is displayed.</li>
+</ul>
+
+<h2>Log in:</h2>
+<p>
+    <form th:action="@{/brokenauthentication}" method="POST">
+        <span>User name:</span> <input type="text" name="username"/><br />
+        <span>Password:</span> <input type="password" name="password"/><br />
+        <input type="submit" value="Login"/><br />
+        <span th:text="${error}"></span><br/>
+    </form>
+</p>
+<p><a href="/">Go to index page</a></p>
+</body>
+</html>

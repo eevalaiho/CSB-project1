@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Cross Site Scripting (XSS) | Cyber Security Base Course Project I</title>
+    </head>
+    <body>
+        <p><a href="/">Go to index page</a></p>
+        <h1>Cross-Site Scripting (XSS)</h1>
+        <p>Cross-site scripting (XSS) attacks are injection type attacks that are
+            used to inject malicious scripts - generally client side scripts -
+            in web site. An attacker may use XSS attacks to gain access to any
+            cookies, session tokens or other sensitive information that is stored
+            in an end-users computer or even rewrite contents of a html page. </p>
+        <p>The flawed implementation allows users to post unchecked html and
+            javascript code in the web site's database and displays it unencoded.
+            This allows an attacker to employ XSS attacks.</p>
+
+        <h2>Steps to execute</h2>
+        <ul>
+            <li>type Check this out!!! in the title field and &lt;a href="javascript:alert('Ha ha ha');"&gt;You won't be disappointed&lt;/a&gt; and click submit</li>
+            <li>=> A message box saying Ha ha ha is displayed</li>
+        </ul>
+
+        <h2>Comments</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Content</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="message : ${messages}">
+                <td th:text="${message.title}">Title</td>
+                <td th:utext="${message.content}">Content</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h3>Post a comment</h3>
+        <form th:action="@{/crossitescripting}" method="POST">
+            <span>Title:</span><br /><input type="text" name="title"/><br />
+            <span>Content:</span><br /><textarea name="content" rows="5"/><br />
+            <input type="submit" value="Submit"/>
+        </form>
+
+        <p><a href="/">Go to index page</a></p>
+
+    </body>
+</html>
