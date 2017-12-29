@@ -18,5 +18,10 @@ public class Message extends AbstractPersistable<Long> {
         this.title = title;
         this.content = content;
     }
+
+    public Message(String content) {
+        this();
+        this.content = content;
+    }
 }
 

@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Cross Site Scripting (XSS) | Cyber Security Base Course Project I</title>
+        <title>Cross Site Scripting (XSS) - Stored XSS Attack | Cyber Security Base Course Project I</title>
     </head>
     <body>
         <p><a href="/">Go to index page</a></p>
-        <h1>Cross-Site Scripting (XSS)</h1>
+        <h1>Cross-Site Scripting (XSS) - Stored XSS Attack</h1>
         <p>Cross-site scripting (XSS) attacks are injection type attacks that are
             used to inject malicious scripts - generally client side scripts -
-            in web site. An attacker may use XSS attacks to gain access to any
+            in web site. XSS flaws occur for when a web site dislays user supplied
+            data without proper validation and encoding.
+            An attacker may use XSS attacks to gain access to any
             cookies, session tokens or other sensitive information that is stored
             in an end-users computer or even rewrite contents of a html page. </p>
         <p>The flawed implementation allows users to post unchecked html and
             javascript code in the web site's database and displays it unencoded.
             This allows an attacker to employ XSS attacks.</p>
 
-        <h2>Steps to execute</h2>
+        <h2>Steps to exploit the Stored XSS vulnerability</h2>
         <ul>
             <li>type Check this out!!! in the title field and &lt;a href="javascript:alert('Ha ha ha');"&gt;You won't be disappointed&lt;/a&gt; and click submit</li>
             <li>=> A message box saying Ha ha ha is displayed</li>

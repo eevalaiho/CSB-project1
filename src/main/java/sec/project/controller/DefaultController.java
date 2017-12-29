@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.spring4.context.SpringWebContext;
 import sec.project.domain.Account;
+import sec.project.domain.Credential;
 import sec.project.domain.Message;
 import sec.project.domain.Signup;
 import sec.project.repository.SignupRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +95,7 @@ public class DefaultController {
         Connection connection = DriverManager.getConnection(databaseAddress, "sa", "");
 
         // Get all messages
-        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM messages");
+        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM messages WHERE type='STO'");
 
         List<Message> list = new ArrayList<Message>();
         while (resultSet.next())
@@ -113,7 +116,7 @@ public class DefaultController {
         Connection connection = DriverManager.getConnection(databaseAddress, "sa", "");
 
         // Insert new message
-        String insertQuery = "INSERT INTO messages (title, content) VALUES(?, ?)";
+        String insertQuery = "INSERT INTO messages (type, title, content) VALUES('STO', ?, ?)";
         connection.setAutoCommit(false);
         PreparedStatement insert = connection.prepareStatement(insertQuery);
         insert.setString(1, title);
@@ -126,4 +129,86 @@ public class DefaultController {
 
         return "redirect:/crossitescripting";
     }
+
+    @RequestMapping(value = "/phishing", method = RequestMethod.GET)
+    public String phishing(Model model, String content) throws SQLException {
+
+        String databaseAddress = "jdbc:h2:file:./database";
+        Connection connection = DriverManager.getConnection(databaseAddress, "sa", "");
+
+        // Get all messages
+        ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM messages WHERE type='PHI'");
+        List<Message> messages = new ArrayList<Message>();
+        while (rs.next())
+            messages .add(new Message(rs.getString("content")));
+        model.addAttribute("messages", messages );
+        rs.close();
+
+        // Get all credentials
+        rs = connection.createStatement().executeQuery("SELECT * FROM credentials");
+        List<Credential> list = new ArrayList<Credential>();
+        while (rs.next())
+            list.add(new Credential(rs.getString("username"), rs.getString("password")));
+        model.addAttribute("credentials", list);
+        rs.close();
+
+        // Close the connection
+        connection.close();
+
+        return "phishing";
+    }
+
+    @RequestMapping(value = "/phishing", method = RequestMethod.POST)
+    public String submitPhishingForm(Model model, @RequestParam String content) throws SQLException {
+
+        String databaseAddress = "jdbc:h2:file:./database";
+        Connection connection = DriverManager.getConnection(databaseAddress, "sa", "");
+
+        // Insert new message
+        String insertQuery = "INSERT INTO messages (type, content) VALUES('PHI', ?)";
+        connection.setAutoCommit(false);
+        PreparedStatement insert = connection.prepareStatement(insertQuery);
+        insert.setString(1, content);
+        insert.execute();
+        connection.commit();
+
+        // Close the connection
+        connection.close();
+
+        return "redirect:/phishing";
+    }
+
+    @RequestMapping(value = "/catcher", method = RequestMethod.GET)
+    public String phishingCatcher(String username, String password) throws SQLException {
+
+        String databaseAddress = "jdbc:h2:file:./database";
+        Connection connection = DriverManager.getConnection(databaseAddress, "sa", "");
+
+        // Insert new message
+        String insertQuery = "INSERT INTO credentials (username, password) VALUES(?, ?)";
+        connection.setAutoCommit(false);
+        PreparedStatement insert = connection.prepareStatement(insertQuery);
+        insert.setString(1, username);
+        insert.setString(2, password);
+        insert.execute();
+        connection.commit();
+
+        // Close the connection
+        connection.close();
+
+        return "phishing";
+    }
+
+    @RequestMapping(value = "/redirect", method = RequestMethod.GET)
+    public String redirect() {
+        return "redirect";
+    }
+
+
+    @RequestMapping(value = "/redirectToUrl", method = RequestMethod.GET)
+    public String redirectToUrl(HttpServletResponse response, @RequestParam String url) throws IOException {
+        response.sendRedirect(url);
+        return "redirect";
+    }
+
 }
