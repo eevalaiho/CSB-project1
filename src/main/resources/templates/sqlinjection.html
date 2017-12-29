@@ -9,7 +9,7 @@
         <p>SQL injection is a code injection technique where an attacker can execute
             malicious SQL statements in web applications database. It can affect any web
             application that uses a SQL database. By leveraging SQL injection technique an
-            attacker may retrieve the contents of or destroy an entire database.
+            attacker may retrieve the contents of or even destroy an entire database.
             This may lead to leaking sensitive data such as customer data, sensitive personal
             information, intellectual property and other sensitive information.</p>
         <p>In order to exploit the vulnerability an attacker must find an input in the
@@ -18,19 +18,28 @@
             the applications database.</p>
         <p>The form below allows a user to view their own account information. User is supposed
             to enter their own iban number. Upon execution the web
-            application executes following SQL: "SELECT * FROM accounts WHERE iban='" + iban + "'".
+            application executes following SQL: <span style="color: cornflowerblue; font-style: oblique;">"SELECT * FROM accounts WHERE iban='" + iban + "'"</span>.
             Since iban number is included directly in the executed sql statement, a malicious
             user may view other users' sensitive information by using SQL injection technique.</p>
-        <h2>Steps to execute</h2>
+        <h2>Steps to identify</h2>
         <p>To view a user's account information:</p>
         <ul>
-            <li>enter AA11112222333344 in the text box and click the button.</li>
+            <li>enter <span style="color: cornflowerblue; font-style: oblique;">AA11112222333344</span> in the text box and click the button.</li>
             <li>=> the user's account information is displayed.</li>
         </ul>
         <p>To execute a malicous SQL statement and view all users' account information:</p>
         <ul>
-            <li>enter any' OR 1=1 OR '' = ' in the text box and click the button.</li>
+            <li>enter <span style="color: cornflowerblue; font-style: oblique;">any' OR 1=1 OR '' = '</span> in the text box and click the button.</li>
             <li>=> all users' account information is displayed.</li>
+        </ul>
+        <h2>Steps to fix the implementation</h2>
+        <p>To fix the flawed implementation user-supplied data should not be sent directly to
+            database. In stead user-supplied data should be properly escaped and query
+            parametrization should be used. In this example:</p>
+        <ul>
+            <li>The SQL statement should be changed to a prepared statement, </li>
+            <li>the query should be changed to <span style="color: cornflowerblue; font-style: oblique;">"SELECT * FROM accounts WHERE iban=?"</span> and</li>
+            <li>the iban value should be added as a query parameter.</li>
         </ul>
         <h2>View your account information:</h2>
         <form th:action="@{/sqlinjection}" method="POST">

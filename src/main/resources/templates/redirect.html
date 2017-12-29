@@ -6,12 +6,17 @@
 <body>
 <p><a href="/">Go to index page</a></p>
 <h1>Unvalidated redirects and forwards</h1>
-<p></p>
-
-<h2>Steps to exploit the vulnerability</h2>
+<p>An attacker may use unvalidated redirects to forward unsuspecting users to malicious web
+    sites. The attacker may then launch a phishing scam to steal user's credentials or other
+    sensitive information or install malware on user's computer. They can also be used
+    to bypass access checks and allow the attacker to gain access to priviledged functions.</p>
+<h2>Steps to identify</h2>
 <ul>
-    <li>Click the following link <a href="/redirectToUrl?url=https://cybersecuritybase.github.io/">click this link</a> to get redirected</li>
+    <li>Click the following link <a href="http://localhost:8090/redirectToUrl?url=https://cybersecuritybase.github.io/">click this link</a> to get redirected</li>
+    <li>=> A request is sent to the project site and the user's browser is then forwarded to an external web site.</li>
 </ul>
+<h2>Steps to fix the application</h2>
+<p>The application should not allow redirects or forwards to any url. Instead the url's should be checked against a whitelist so that only valid redirects are executed.</p>
 
 <p><a href="/">Go to index page</a></p>
 

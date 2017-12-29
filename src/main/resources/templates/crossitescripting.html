@@ -8,20 +8,26 @@
         <h1>Cross-Site Scripting (XSS) - Stored XSS Attack</h1>
         <p>Cross-site scripting (XSS) attacks are injection type attacks that are
             used to inject malicious scripts - generally client side scripts -
-            in web site. XSS flaws occur for when a web site dislays user supplied
-            data without proper validation and encoding.
-            An attacker may use XSS attacks to gain access to any
-            cookies, session tokens or other sensitive information that is stored
-            in an end-users computer or even rewrite contents of a html page. </p>
-        <p>The flawed implementation allows users to post unchecked html and
+            in web site. XSS flaws occur when a web site dislays user supplied
+            data without proper validation and encoding.</p>
+        <p>An attacker may use XSS attacks to gain access to any cookies, session
+            tokens or other sensitive information that is stored on an end-users
+            computer or rewrite contents of a html page. </p>
+        <p>The implementation allows users to post unchecked, unescaped html and
             javascript code in the web site's database and displays it unencoded.
             This allows an attacker to employ XSS attacks.</p>
-
-        <h2>Steps to exploit the Stored XSS vulnerability</h2>
+        <h2>Steps to identify</h2>
         <ul>
-            <li>type Check this out!!! in the title field and &lt;a href="javascript:alert('Ha ha ha');"&gt;You won't be disappointed&lt;/a&gt; and click submit</li>
+            <li>Type <span style="color: cornflowerblue; font-style: oblique;">Check this out!!!</span> in the title field and <span style="color: cornflowerblue; font-style: oblique;">&lt;a href="javascript:alert('Ha ha ha');"&gt;You won't be disappointed&lt;/a&gt;</span> in the content field and click submit</li>
+            <li>=> Text Check this out!!! and a link You won't be disappointed is displayed on the page</li>
+            <li>Click the link.</li>
             <li>=> A message box saying Ha ha ha is displayed</li>
         </ul>
+
+        <h2>Steps to fix the implementation</h2>
+        <p>To fix the flawed implementation user-supplied data should be properly validated and
+            escaped before storing it in the application's database. This disallows
+            running malicious scripts on an end user's browser.</p>
 
         <h2>Comments</h2>
         <table>

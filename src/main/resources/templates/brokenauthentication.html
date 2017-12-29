@@ -8,35 +8,40 @@
 <h1>Broken Authentication and Session Management</h1>
 <p>Broken authentication and session management flaw occurs when an applications'
     functionalities related to authentication and session management are implemented
-    improperly. This allows attackers to gain access to sensitive content such as
+    improperly. This allows an attacker to gain access to sensitive content such as
     passwords or session keys.</p>
-<p>This flawed implementation allows an attacker to log in to the system without
-    providing a password. This is due to a flaw in error handling management in the
-    web application.</p>
-<p>In order to reproduce the flaw you need to use a for example Burp suite to intercept
-    and modify the web request.</p>
-
-<h2>Steps to execute</h2>
-<p>To log in using valid credentials:</p>
+<p>This flawed implementation allows logging in to the system without providing a
+    password. This is due to a flaw in exception management in the web application.</p>
+<p>In order to identify the flaw you need to intercept the web request, modify and
+    forward it to the original address. This can be done using for example Burp
+    suite. See <a href="https://cybersecuritybase.github.io/securing/part4.html">
+        Securing Software, part 4 page</a> for reference.</p>
+<h2>Steps to identify</h2>
+<p>To succesfully log in using valid credentials:</p>
 <ul>
-    <li>enter larry in the username field and istheking in the password field and click Login.</li>
+    <li>enter <span style="color: cornflowerblue; font-style: oblique;">larry</span> in the username field and <span style="color: cornflowerblue; font-style: oblique;">istheking</span> in the password field and click Login.</li>
     <li>=> a welcome page is displayed.</li>
 </ul>
-<p>To log in using without credentials:</p>
+<p>To unsuccesfully log in using invalid credentials:</p>
 <ul>
-    <li>enter larry in the username field and password in the password field and click Login.</li>
+    <li>enter <span style="color: cornflowerblue; font-style: oblique;">larry</span> in the username field, leave the password field empty and click Login.</li>
     <li>=> an error message is displayed.</li>
 </ul>
-<p>To log in without valid credentials:</p>
+<p>To succesfully log in using invalid credentials:</p>
 <ul>
-    <li>start and configure burp suite to intercept project site's traffic (see
-        <a href="https://cybersecuritybase.github.io/securing/part4.html">Securing
-        Software, part 4 page</a> for reference)</li>
-    <li>setup Burp Suite to intercept (Proxy -> Intercept -> Intercept is on/off)</li>
-    <li>modify the request so that you remove the password parameter</li>
-    <li>forward to original address.</li>
+    <li>start up and configure burp suite to intercept project site's traffic </li>
+    <li>ensure that intercept is on</li>
+    <li>enter <span style="color: cornflowerblue; font-style: oblique;">larry</span> in the username field, leave the password field empty and click Login.</li>
+    <li>=> Burp suite has now intercepted the message.</li>
+    <li>remove the password parameter from the request and forward it to the original address.</li>
     <li>=> a welcome page is displayed.</li>
 </ul>
+
+<h2>Steps to fix the implementation</h2>
+<p>Exception handling in the logging in functionality is implemented improperly and the application
+    logic fails when the password field is missing in the request. The implementation should
+    be fixed so that exceptions in the logging in process will not allow an attacker to log in
+    to the application.</p>
 
 <h2>Log in:</h2>
 <p>
